@@ -51,6 +51,12 @@ describe("GET /api/feed", () => {
       "bob",
       "alice",
     ]);
+    expect(json.posts[0]).toEqual(
+      expect.objectContaining({
+        highFives: 0,
+        comments: [],
+      }),
+    );
   });
 
   it("validates userId", async () => {

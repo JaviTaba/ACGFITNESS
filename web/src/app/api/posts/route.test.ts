@@ -25,6 +25,7 @@ describe("POST /api/posts", () => {
           attachments: [
             { kind: "image", url: "https://example.com/progress.jpg" },
           ],
+          location: "  Community Gym  ",
         }),
       }),
     );
@@ -32,6 +33,9 @@ describe("POST /api/posts", () => {
     expect(response.status).toBe(201);
     const payload = await response.json();
     expect(payload.content).toBe("Goal smashed! 💪");
+    expect(payload.location).toBe("Community Gym");
+    expect(payload.highFives).toBe(0);
+    expect(payload.comments).toEqual([]);
   });
 
   it("validates post input", async () => {

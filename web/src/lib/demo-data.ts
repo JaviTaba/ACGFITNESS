@@ -82,11 +82,21 @@ export const demoPosts: PostEntity[] = [
     content:
       "Crushed the interval session today! 6x400m at 4:10/km - feeling stronger every week.",
     privacy: "public",
+    location: "Riverside Track",
     attachments: [
       {
         kind: "image",
         url: "https://images.unsplash.com/photo-1571731956672-f2b94d7dd0cb",
         alt: "Running shoes on track",
+      },
+    ],
+    highFives: 18,
+    comments: [
+      {
+        id: "comment-1",
+        authorId: "demo-user",
+        content: "Splits looked so smooth—keep that cadence!",
+        createdAt: new Date(),
       },
     ],
     createdAt: new Date(),
@@ -97,7 +107,23 @@ export const demoPosts: PostEntity[] = [
     content:
       "Week 4 of the strength cycle wrapped. Adding +5kg to the deadlift next week (let's go!)",
     privacy: "close_friends",
+    location: "Forge Lab Strength",
     attachments: [],
+    highFives: 9,
+    comments: [
+      {
+        id: "comment-2",
+        authorId: "friend-1",
+        content: "Big jumps! Film the next set so we can check form.",
+        createdAt: new Date(),
+      },
+      {
+        id: "comment-3",
+        authorId: "friend-2",
+        content: "Save some PRs for the rest of us 😅",
+        createdAt: new Date(),
+      },
+    ],
     createdAt: new Date(),
   },
 ];

@@ -21,19 +21,39 @@ function mapPrivacy(value: Prisma.PostPrivacy): PostPrivacy {
   }
 }
 
-function mapPost(
-  post: Prisma.PostGetPayload<{ include: { attachments: true } }>,
-): PostEntity {
+type PostWithRelations = Prisma.PostGetPayload<{
+  include: { attachments: true };
+}> & {
+  comments?: Array<{
+    id: string;
+    authorId: string;
+    content: string;
+    createdAt: Date;
+  }>;
+};
+
+function mapPost(post: PostWithRelations): PostEntity {
   return {
     id: post.id,
     authorId: post.authorId,
     content: post.content,
     privacy: mapPrivacy(post.privacy),
+    location: post.location,
     attachments: post.attachments.map((item) => ({
       kind: item.kind.toLowerCase() as PostAttachment["kind"],
       url: item.url,
       alt: item.alt,
     })),
+    highFives: post.highFives,
+    comments: (post.comments ?? [])
+      .slice()
+      .sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime())
+      .map((comment) => ({
+        id: comment.id,
+        authorId: comment.authorId,
+        content: comment.content,
+        createdAt: comment.createdAt,
+      })),
     createdAt: post.createdAt,
   };
 }
@@ -73,6 +93,7 @@ export class PrismaPostRepository implements PostRepository {
         authorId: payload.authorId,
         content: payload.content,
         privacy: toPrismaPrivacy(payload.privacy),
+        location: payload.location,
         attachments: payload.attachments
           ? {
               create: payload.attachments.map((item) => ({
@@ -83,9 +104,12 @@ export class PrismaPostRepository implements PostRepository {
             }
           : undefined,
       },
-      include: { attachments: true },
-    });
-    return mapPost(created);
+      include: {
+        attachments: true,
+        comments: true,
+      },
+    } as any);
+    return mapPost(created as PostWithRelations);
   }
 
   async listPostsForUsers(userIds: string[]): Promise<PostEntity[]> {
@@ -97,11 +121,16 @@ export class PrismaPostRepository implements PostRepository {
       where: {
         authorId: { in: userIds },
       },
-      include: { attachments: true },
+      include: {
+        attachments: true,
+        comments: {
+          orderBy: { createdAt: "asc" },
+        },
+      },
       orderBy: { createdAt: "desc" },
-    });
+    } as any);
 
-    return posts.map(mapPost);
+    return (posts as PostWithRelations[]).map(mapPost);
   }
 }
 
