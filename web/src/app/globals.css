@@ -1,0 +1,115 @@
+@import "tailwindcss";
+
+:root {
+  --background: #081106;
+  --surface: #122313;
+  --surface-muted: #1b331a;
+  --foreground: #f2f7f0;
+  --brand-lime: #7ddc3a;
+  --brand-green: #38a169;
+  --brand-dark: #0c1d10;
+  --brand-purple: #7d3ac1;
+  --brand-accent: #f9b52c;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+  --color-foreground: var(--foreground);
+  --color-brand: var(--brand-lime);
+  --color-brand-dark: var(--brand-green);
+  --color-brand-purple: var(--brand-purple);
+  --color-brand-accent: var(--brand-accent);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: radial-gradient(circle at top, #1a3a1b 0%, #081106 80%);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.high-five-hand {
+  position: absolute;
+  top: 50%;
+  font-size: 2.8rem;
+  transform: translateY(-50%);
+  filter: drop-shadow(0 0 18px rgba(125, 220, 58, 0.25));
+  animation: high-five-wave 1.6s ease-in-out infinite;
+}
+
+.high-five-hand--left {
+  left: 0;
+  transform-origin: right center;
+}
+
+.high-five-hand--right {
+  right: 0;
+  transform-origin: left center;
+  animation-delay: 0.2s;
+}
+
+@keyframes high-five-wave {
+  0%,
+  100% {
+    transform: translateY(-50%) scale(1);
+  }
+  40% {
+    transform: translateY(-50%) scale(1.15) rotate(-6deg);
+  }
+  50% {
+    transform: translateY(-50%) scale(1.3);
+  }
+  60% {
+    transform: translateY(-50%) scale(1.15) rotate(6deg);
+  }
+}
+
+.high-five-spark {
+  position: absolute;
+  font-size: 1.3rem;
+  animation: high-five-sparkle 1.6s ease-in-out infinite;
+  opacity: 0;
+}
+
+.high-five-spark--top-left {
+  top: 12%;
+  left: 18%;
+}
+
+.high-five-spark--top-right {
+  top: 10%;
+  right: 18%;
+  animation-delay: 0.3s;
+}
+
+.high-five-spark--bottom {
+  bottom: 8%;
+  animation-delay: 0.6s;
+}
+
+@keyframes high-five-sparkle {
+  0%,
+  100% {
+    transform: scale(0.6) translateY(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.1) translateY(-6px);
+    opacity: 1;
+  }
+}

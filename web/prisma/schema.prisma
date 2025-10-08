@@ -1,0 +1,196 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  username  String   @unique
+  name      String
+  bio       String?
+  avatarUrl String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  posts                  Post[]
+  meals                  MealLog[]
+  weights                WeightEntry[]
+  measurements           MeasurementEntry[]
+  workouts               Workout[]
+  friendRequestsSent     FriendRequest[]    @relation("FriendRequestsSent")
+  friendRequestsReceived FriendRequest[]    @relation("FriendRequestsReceived")
+  friendshipsAsUser      Friendship[]       @relation("FriendshipUser")
+  friendshipsAsFriend    Friendship[]       @relation("FriendshipFriend")
+  closeFriends           CloseFriend[]      @relation("CloseFriendOwner")
+  closeFriendOf          CloseFriend[]      @relation("CloseFriendMember")
+}
+
+model FriendRequest {
+  id          String              @id @default(uuid())
+  requesterId String
+  addresseeId String
+  message     String?
+  status      FriendRequestStatus @default(PENDING)
+  createdAt   DateTime            @default(now())
+  respondedAt DateTime?
+
+  requester User @relation("FriendRequestsSent", fields: [requesterId], references: [id])
+  addressee User @relation("FriendRequestsReceived", fields: [addresseeId], references: [id])
+
+  @@index([requesterId, addresseeId])
+}
+
+enum FriendRequestStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+}
+
+model Friendship {
+  id        String   @id @default(uuid())
+  userId    String
+  friendId  String
+  createdAt DateTime @default(now())
+
+  user   User @relation("FriendshipUser", fields: [userId], references: [id])
+  friend User @relation("FriendshipFriend", fields: [friendId], references: [id])
+
+  @@unique([userId, friendId])
+  @@index([userId])
+  @@index([friendId])
+}
+
+model CloseFriend {
+  id        String   @id @default(uuid())
+  userId    String
+  friendId  String
+  createdAt DateTime @default(now())
+
+  owner  User @relation("CloseFriendOwner", fields: [userId], references: [id])
+  friend User @relation("CloseFriendMember", fields: [friendId], references: [id])
+
+  @@unique([userId, friendId])
+  @@index([userId])
+}
+
+model MealLog {
+  id           String   @id @default(uuid())
+  userId       String
+  loggedAt     DateTime
+  name         String
+  calories     Int
+  proteinGrams Int
+  carbsGrams   Int
+  fatsGrams    Int
+  notes        String?
+  createdAt    DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([userId, loggedAt])
+}
+
+model WeightEntry {
+  id        String   @id @default(uuid())
+  userId    String
+  loggedAt  DateTime
+  weightKg  Float
+  source    String
+  note      String?
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([userId, loggedAt])
+}
+
+model MeasurementEntry {
+  id        String          @id @default(uuid())
+  userId    String
+  loggedAt  DateTime
+  unit      MeasurementUnit @default(CM)
+  values    Json
+  createdAt DateTime        @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([userId, loggedAt])
+}
+
+enum MeasurementUnit {
+  CM
+  IN
+}
+
+model Workout {
+  id                 String            @id @default(uuid())
+  userId             String
+  loggedAt           DateTime
+  title              String
+  durationMinutes    Int?
+  perceivedIntensity WorkoutIntensity?
+  notes              String?
+  createdAt          DateTime          @default(now())
+
+  user      User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  exercises WorkoutExercise[]
+
+  @@index([userId, loggedAt])
+}
+
+model WorkoutExercise {
+  id        String @id @default(uuid())
+  workoutId String
+  name      String
+  sets      Json
+
+  workout Workout @relation(fields: [workoutId], references: [id])
+}
+
+enum WorkoutIntensity {
+  EASY
+  MODERATE
+  HARD
+}
+
+model Post {
+  id        String      @id @default(uuid())
+  authorId  String
+  content   String
+  privacy   PostPrivacy @default(FRIENDS)
+  createdAt DateTime    @default(now())
+
+  author      User             @relation(fields: [authorId], references: [id])
+  attachments PostAttachment[]
+
+  @@index([authorId, createdAt])
+}
+
+model PostAttachment {
+  id     String         @id @default(uuid())
+  postId String
+  kind   AttachmentKind
+  url    String
+  alt    String?
+
+  post Post @relation(fields: [postId], references: [id])
+}
+
+enum PostPrivacy {
+  FRIENDS
+  CLOSE_FRIENDS
+  PRIVATE
+  PUBLIC
+}
+
+enum AttachmentKind {
+  IMAGE
+  VIDEO
+  LINK
+}
