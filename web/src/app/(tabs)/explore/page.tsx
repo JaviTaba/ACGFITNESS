@@ -3,7 +3,10 @@ import Link from "next/link";
 import { getFeed } from "@/lib/api";
 import { demoProfile } from "@/lib/demo-data";
 import {
+  Hand,
   Lock,
+  MapPin,
+  MessageCircle,
   Users,
   Search,
   Sparkles,
@@ -89,6 +92,12 @@ export default async function ExplorePage() {
                     <span className="text-xs text-foreground/60">
                       @{post.authorId}
                     </span>
+                    {post.location && (
+                      <p className="mt-1 flex items-center gap-1 text-xs text-foreground/50">
+                        <MapPin className="h-3.5 w-3.5" />
+                        <span>{post.location}</span>
+                      </p>
+                    )}
                   </div>
                 </div>
                 <PrivacyBadge privacy={post.privacy} />
@@ -107,16 +116,45 @@ export default async function ExplorePage() {
                   />
                 </div>
               )}
-              <footer className="mt-4 flex items-center justify-between text-xs text-foreground/50">
-                <span>
-                  {post.createdAt.toLocaleDateString(undefined, {
-                    month: "short",
-                    day: "numeric",
-                  })}
-                </span>
-                <button className="rounded-full bg-brand/15 px-3 py-1 font-semibold text-brand transition hover:bg-brand/25">
-                  Say congrats
-                </button>
+              <footer className="mt-4 space-y-3">
+                <div className="flex items-center justify-between text-xs text-foreground/50">
+                  <span>
+                    {post.createdAt.toLocaleDateString(undefined, {
+                      month: "short",
+                      day: "numeric",
+                    })}
+                  </span>
+                  <div className="flex items-center gap-3">
+                    <span className="flex items-center gap-1 font-semibold text-brand">
+                      <Hand className="h-3.5 w-3.5" />
+                      {post.highFives} high-fives
+                    </span>
+                    <span className="flex items-center gap-1 font-semibold text-foreground/70">
+                      <MessageCircle className="h-3.5 w-3.5" />
+                      {post.comments.length} comments
+                    </span>
+                  </div>
+                </div>
+                {post.comments.length > 0 && (
+                  <ul className="space-y-2 text-sm text-foreground/80">
+                    {post.comments.map((comment) => (
+                      <li
+                        key={comment.id}
+                        className="rounded-2xl border border-white/5 bg-surface-muted/60 px-3 py-2"
+                      >
+                        <p className="text-xs font-semibold text-foreground">
+                          {toDisplayName(comment.authorId)}
+                          <span className="ml-2 text-foreground/50">
+                            @{comment.authorId}
+                          </span>
+                        </p>
+                        <p className="mt-1 text-xs leading-relaxed text-foreground/80">
+                          {comment.content}
+                        </p>
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </footer>
             </article>
           ))}

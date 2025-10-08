@@ -19,6 +19,7 @@ model User {
   updatedAt DateTime @updatedAt
 
   posts                  Post[]
+  postComments           PostComment[]
   meals                  MealLog[]
   weights                WeightEntry[]
   measurements           MeasurementEntry[]
@@ -164,10 +165,13 @@ model Post {
   authorId  String
   content   String
   privacy   PostPrivacy @default(FRIENDS)
+  location  String?
+  highFives Int        @default(0)
   createdAt DateTime    @default(now())
 
   author      User             @relation(fields: [authorId], references: [id])
   attachments PostAttachment[]
+  comments    PostComment[]
 
   @@index([authorId, createdAt])
 }
@@ -180,6 +184,19 @@ model PostAttachment {
   alt    String?
 
   post Post @relation(fields: [postId], references: [id])
+}
+
+model PostComment {
+  id        String   @id @default(uuid())
+  postId    String
+  authorId  String
+  content   String
+  createdAt DateTime @default(now())
+
+  post   Post @relation(fields: [postId], references: [id])
+  author User @relation(fields: [authorId], references: [id])
+
+  @@index([postId, createdAt])
 }
 
 enum PostPrivacy {
