@@ -27,14 +27,20 @@ describe("socialService", () => {
       content: "  First ride complete!  ",
       privacy: "friends",
       attachments: [{ kind: "image", url: "https://example.com/ride.jpg" }],
+<<<<<<< HEAD
       location: "  River Loop  ",
+=======
+>>>>>>> aab1da3 (first version)
     });
 
     expect(post.id).toBeDefined();
     expect(post.content).toBe("First ride complete!");
+<<<<<<< HEAD
     expect(post.location).toBe("River Loop");
     expect(post.highFives).toBe(0);
     expect(post.comments).toEqual([]);
+=======
+>>>>>>> aab1da3 (first version)
   });
 
   it("returns the feed including accepted friends and self", async () => {

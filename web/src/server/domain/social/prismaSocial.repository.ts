@@ -21,6 +21,7 @@ function mapPrivacy(value: Prisma.PostPrivacy): PostPrivacy {
   }
 }
 
+<<<<<<< HEAD
 type PostWithRelations = Prisma.PostGetPayload<{
   include: { attachments: true };
 }> & {
@@ -33,17 +34,26 @@ type PostWithRelations = Prisma.PostGetPayload<{
 };
 
 function mapPost(post: PostWithRelations): PostEntity {
+=======
+function mapPost(
+  post: Prisma.PostGetPayload<{ include: { attachments: true } }>,
+): PostEntity {
+>>>>>>> aab1da3 (first version)
   return {
     id: post.id,
     authorId: post.authorId,
     content: post.content,
     privacy: mapPrivacy(post.privacy),
+<<<<<<< HEAD
     location: post.location,
+=======
+>>>>>>> aab1da3 (first version)
     attachments: post.attachments.map((item) => ({
       kind: item.kind.toLowerCase() as PostAttachment["kind"],
       url: item.url,
       alt: item.alt,
     })),
+<<<<<<< HEAD
     highFives: post.highFives,
     comments: (post.comments ?? [])
       .slice()
@@ -54,6 +64,8 @@ function mapPost(post: PostWithRelations): PostEntity {
         content: comment.content,
         createdAt: comment.createdAt,
       })),
+=======
+>>>>>>> aab1da3 (first version)
     createdAt: post.createdAt,
   };
 }
@@ -93,7 +105,10 @@ export class PrismaPostRepository implements PostRepository {
         authorId: payload.authorId,
         content: payload.content,
         privacy: toPrismaPrivacy(payload.privacy),
+<<<<<<< HEAD
         location: payload.location,
+=======
+>>>>>>> aab1da3 (first version)
         attachments: payload.attachments
           ? {
               create: payload.attachments.map((item) => ({
@@ -104,12 +119,18 @@ export class PrismaPostRepository implements PostRepository {
             }
           : undefined,
       },
+<<<<<<< HEAD
       include: {
         attachments: true,
         comments: true,
       },
     } as any);
     return mapPost(created as PostWithRelations);
+=======
+      include: { attachments: true },
+    });
+    return mapPost(created);
+>>>>>>> aab1da3 (first version)
   }
 
   async listPostsForUsers(userIds: string[]): Promise<PostEntity[]> {
@@ -121,6 +142,7 @@ export class PrismaPostRepository implements PostRepository {
       where: {
         authorId: { in: userIds },
       },
+<<<<<<< HEAD
       include: {
         attachments: true,
         comments: {
@@ -131,6 +153,13 @@ export class PrismaPostRepository implements PostRepository {
     } as any);
 
     return (posts as PostWithRelations[]).map(mapPost);
+=======
+      include: { attachments: true },
+      orderBy: { createdAt: "desc" },
+    });
+
+    return posts.map(mapPost);
+>>>>>>> aab1da3 (first version)
   }
 }
 

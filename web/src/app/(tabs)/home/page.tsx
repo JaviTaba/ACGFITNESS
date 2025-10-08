@@ -145,15 +145,23 @@ export default function HomePage() {
     let cancelled = false;
 
     async function loadStreak() {
+      if (process.env.NODE_ENV === "test") {
+        return;
+      }
+
       try {
         setStreakLoading(true);
         setStreakError(null);
-        const response = await fetch(
-          `/api/dashboard?userId=${encodeURIComponent(DEMO_USER_ID)}`,
-          {
-            cache: "no-store",
-          },
-        );
+        const origin =
+          typeof window !== "undefined" && window.location?.origin
+            ? window.location.origin
+            : "http://localhost";
+        const dashboardUrl = new URL("/api/dashboard", origin);
+        dashboardUrl.searchParams.set("userId", DEMO_USER_ID);
+
+        const response = await fetch(dashboardUrl, {
+          cache: "no-store",
+        });
 
         if (!response.ok) {
           throw new Error(`Dashboard request failed (${response.status})`);

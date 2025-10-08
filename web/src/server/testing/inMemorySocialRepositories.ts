@@ -16,8 +16,11 @@ export class InMemoryPostRepository implements PostRepository {
       id: randomUUID(),
       createdAt: new Date(Date.now() + this.counter++),
       ...payload,
+<<<<<<< HEAD
       attachments: payload.attachments?.map((item) => ({ ...item })),
       comments: payload.comments.map((comment) => ({ ...comment })),
+=======
+>>>>>>> aab1da3 (first version)
     };
     this.posts.set(record.id, record);
     return record;

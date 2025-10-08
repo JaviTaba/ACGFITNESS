@@ -12,6 +12,8 @@ import {
   X,
 } from "lucide-react";
 
+const IS_TEST_ENV = process.env.NODE_ENV === "test";
+
 const ACTIONS = [
   {
     href: "/home?compose=meal",
@@ -87,7 +89,12 @@ export function AddMenu() {
               <li key={action.href}>
                 <Link
                   href={action.href}
-                  onClick={() => setOpen(false)}
+                  onClick={(event) => {
+                    if (IS_TEST_ENV) {
+                      event.preventDefault(); // Avoid jsdom navigation warnings during tests.
+                    }
+                    setOpen(false);
+                  }}
                   className="flex items-center gap-3 rounded-xl border border-white/5 bg-surface px-3 py-2 transition hover:border-brand hover:bg-surface-muted"
                 >
                   <action.icon className="h-5 w-5 text-brand" />

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # AcogoFitness Web
 
 This directory contains the Next.js application that powers the AcogoFitness prototype. It covers the streak celebration flow, fully functional log creation sheet, customizable dashboard widgets, explore discovery experience, and compact profile layout requested in the latest QA round.
@@ -26,6 +27,8 @@ The app runs on [http://localhost:3000](http://localhost:3000). The `New Log` bu
 - `public/` - static assets including the AcogoFitness logo
 
 The UI uses Tailwind CSS with a brand palette based on lime, forest green, and purple.
+=======
+>>>>>>> aab1da3 (first version)
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started

@@ -3,10 +3,14 @@ import Link from "next/link";
 import { getFeed } from "@/lib/api";
 import { demoProfile } from "@/lib/demo-data";
 import {
+<<<<<<< HEAD
   Hand,
   Lock,
   MapPin,
   MessageCircle,
+=======
+  Lock,
+>>>>>>> aab1da3 (first version)
   Users,
   Search,
   Sparkles,
@@ -92,12 +96,15 @@ export default async function ExplorePage() {
                     <span className="text-xs text-foreground/60">
                       @{post.authorId}
                     </span>
+<<<<<<< HEAD
                     {post.location && (
                       <p className="mt-1 flex items-center gap-1 text-xs text-foreground/50">
                         <MapPin className="h-3.5 w-3.5" />
                         <span>{post.location}</span>
                       </p>
                     )}
+=======
+>>>>>>> aab1da3 (first version)
                   </div>
                 </div>
                 <PrivacyBadge privacy={post.privacy} />
@@ -116,6 +123,7 @@ export default async function ExplorePage() {
                   />
                 </div>
               )}
+<<<<<<< HEAD
               <footer className="mt-4 space-y-3">
                 <div className="flex items-center justify-between text-xs text-foreground/50">
                   <span>
@@ -155,6 +163,18 @@ export default async function ExplorePage() {
                     ))}
                   </ul>
                 )}
+=======
+              <footer className="mt-4 flex items-center justify-between text-xs text-foreground/50">
+                <span>
+                  {post.createdAt.toLocaleDateString(undefined, {
+                    month: "short",
+                    day: "numeric",
+                  })}
+                </span>
+                <button className="rounded-full bg-brand/15 px-3 py-1 font-semibold text-brand transition hover:bg-brand/25">
+                  Say congrats
+                </button>
+>>>>>>> aab1da3 (first version)
               </footer>
             </article>
           ))}

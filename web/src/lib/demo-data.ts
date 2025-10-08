@@ -82,7 +82,10 @@ export const demoPosts: PostEntity[] = [
     content:
       "Crushed the interval session today! 6x400m at 4:10/km - feeling stronger every week.",
     privacy: "public",
+<<<<<<< HEAD
     location: "Riverside Track",
+=======
+>>>>>>> aab1da3 (first version)
     attachments: [
       {
         kind: "image",
@@ -90,6 +93,7 @@ export const demoPosts: PostEntity[] = [
         alt: "Running shoes on track",
       },
     ],
+<<<<<<< HEAD
     highFives: 18,
     comments: [
       {
@@ -99,6 +103,8 @@ export const demoPosts: PostEntity[] = [
         createdAt: new Date(),
       },
     ],
+=======
+>>>>>>> aab1da3 (first version)
     createdAt: new Date(),
   },
   {
@@ -107,6 +113,7 @@ export const demoPosts: PostEntity[] = [
     content:
       "Week 4 of the strength cycle wrapped. Adding +5kg to the deadlift next week (let's go!)",
     privacy: "close_friends",
+<<<<<<< HEAD
     location: "Forge Lab Strength",
     attachments: [],
     highFives: 9,
@@ -124,6 +131,9 @@ export const demoPosts: PostEntity[] = [
         createdAt: new Date(),
       },
     ],
+=======
+    attachments: [],
+>>>>>>> aab1da3 (first version)
     createdAt: new Date(),
   },
 ];
